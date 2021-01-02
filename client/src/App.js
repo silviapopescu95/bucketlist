@@ -1,133 +1,133 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import './App.css'
+import React, { Component } from "react";
+import { Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
-function App() {
-  const [books, setBooks] = useState([]);
-  const [editing, setEditing] = useState(null);
+import AuthService from "./services/auth.service";
 
-  useEffect(() => {
-    getBooks();
-  }, []);
+import Login from "./components/login.component";
+import Home from "./components/home.component";
+import Register from "./components/register.component";
+import BookList from "./components/book.component";
+import Profile from "./components/profile.component";
 
-  // Create
-  const onSubmitBook = async e => {
-    e.preventDefault()
-    const { title, author, description } = e.target
-    await axios.post('/api/books', {
-      title: title.value,
-      author: author.value,
-      description: description.value,
-    })
-    title.value = ''
-    author.value = ''
-    description.value = ''
-    getBooks()
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
+
+    this.state = {
+      showModeratorBoard: false,
+      showAdminBoard: false,
+      currentUser: undefined,
+    };
   }
 
-  // Read
-  const getBooks = async () => {
-    const res = await axios.get('/api/books')
-    const data = res.data
-    setBooks(data)
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+      });
+    }
   }
 
-  // Update
-  const onSubmitEdits = async (e, id) => {
-    e.preventDefault()
-    const { title, author, description } = e.target
-    await axios.post(`/api/books/update/${id}`, {
-      title: title.value,
-      author: author.value,
-      description: description.value,
-    })
-    setEditing(null)
-    getBooks()
+  logOut() {
+    AuthService.logout();
   }
 
-  // Delete
-  const deleteBook = async bookToDelete => {
-    await axios({
-      method: 'DELETE',
-      url: '/api/books/',
-      data: {
-        id: bookToDelete,
-      },
-    })
-    await getBooks()
-  }
+  render() {
+    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
 
-  return (
-    <div className="App">
-      <div className="DataInput">
-        <h2>Enter book:</h2>
-        <form onSubmit={e => onSubmitBook(e)}>
-          <label htmlFor="title">Title:</label>
-          <input type="text" name="title" />
-          <label htmlFor="author">Author:</label>
-          <input type="text" name="author" />
-          <label htmlFor="description">Description:</label>
-          <input type="text" name="description" />
-          <button>Add Book</button>
-        </form>
-      </div>
-      <div className="DataOutput">
-        {books.map(book => (
-          <div key={book._id}>
-            {editing !== book._id ? (
-              <div key={book._id} className="DataOutput__card">
-                <div className="DataOutput__card--details">
-                  <div>
-                    <span>Title:</span>
-                    {book.title}
-                  </div>
-                  <div>
-                    <span>Author:</span>
-                    {book.author}
-                  </div>
-                  <div>
-                    <span>Description:</span>
-                    {book.description}
-                  </div>
-                </div>
-                <div className="DataOutput__card--options">
-                  <button onClick={() => setEditing(book._id)}>Edit</button>
-                  <button onClick={() => deleteBook(book._id)}>Delete</button>
-                </div>
-              </div>
-            ) : (
-                <div key={book._id} className="DataOutput__editing">
-                  <form onSubmit={e => onSubmitEdits(e, book._id)}>
-                    <div className="DataOutput__editing--option">
-                      <label htmlFor="title">Title:</label>
-                      <input type="text" name="title" defaultValue={book.title} />
-                    </div>
-                    <div className="DataOutput__editing--option">
-                      <label htmlFor="author">Author:</label>
-                      <input type="text" name="author" defaultValue={book.author} />
-                    </div>
-                    <div className="DataOutput__editing--option">
-                      <label htmlFor="description">Description:</label>
-                      <input type="text" name="description" defaultValue={book.description} />
-                    </div>
-                    <div>
-                      <button type="Submit">Submit</button>
-                      <button
-                        className="DataOutput__editing--cancel"
-                        onClick={() => setEditing(null)}
-                      >
-                        Cancel
-              </button>
-                    </div>
-                  </form>
-                </div>
-              )}
+    return (
+      <div>
+        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <Link to={"/"} className="navbar-brand">
+           Project 3
+          </Link>
+          <div className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <Link to={"/home"} className="nav-link">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/book"} className="nav-link">
+                Book
+              </Link>
+            </li>
+
+            {showModeratorBoard && (
+              <li className="nav-item">
+                <Link to={"/mod"} className="nav-link">
+                  Moderator Board
+                </Link>
+              </li>
+            )}
+
+            {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin Board
+                </Link>
+              </li>
+            )}
+
+            {currentUser && (
+              <li className="nav-item">
+                <Link to={"/user"} className="nav-link">
+                  User
+                </Link>
+              </li>
+            )}
           </div>
-        ))}
+
+          {currentUser ? (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/profile"} className="nav-link">
+                  {currentUser.username}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a href="/login" className="nav-link" onClick={this.logOut}>
+                  LogOut
+                </a>
+              </li>
+            </div>
+          ) : (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/login"} className="nav-link">
+                  Login
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link to={"/register"} className="nav-link">
+                  Sign Up
+                </Link>
+              </li>
+            </div>
+          )}
+        </nav>
+
+        <div className="container mt-3">
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/book" component={BookList} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/profile" component={Profile} />
+          </Switch>
+        </div>
       </div>
-
-
-    </div>
-  )
+    );
+  }
 }
-export default App
+
+export default App;
