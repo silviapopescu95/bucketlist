@@ -48,7 +48,7 @@ class App extends Component {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
-           2021 Bucket List App
+           2021 Bucket List
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">

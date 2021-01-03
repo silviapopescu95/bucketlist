@@ -4,6 +4,8 @@ import UserService from "../services/user.service";
 
 import BucketLists from "./bucketlist.component";
 
+import bucketImage from "../images/bucketlist.png"
+
 export default class BoardUser extends Component {
   constructor(props) {
     super(props);
@@ -36,8 +38,9 @@ export default class BoardUser extends Component {
   render() {
     return (
       <div className="container">
-        <header className="jumbotron">
-          <h3>2021 Bucket List</h3>
+        <header className="jumbotron text-center">
+          <h3 className="text-center">2021 Bucket List</h3>
+          <img src={bucketImage} width="20%" height="20%" className="text-right"/>
         </header>
         <div><BucketLists></BucketLists></div>
       </div>
