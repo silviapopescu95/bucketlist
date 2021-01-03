@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 // initializes the express application
 const app = express()
 
-const path = __dirname + '/app/views/';
+const path = __dirname + '/views/';
 
 app.use(express.static(path));
 
