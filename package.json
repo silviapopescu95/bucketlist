@@ -9,6 +9,6 @@
   "scripts": {
     "client": "cd client && npm install && npm start",
     "server": "cd api && npm install && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\""
   }
 }
