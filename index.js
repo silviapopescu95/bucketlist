@@ -10,12 +10,9 @@ const path = __dirname + '/views/';
 
 app.use(express.static(path));
 
-
 // imports the API from the routes/api folder
 const books = require('./routes/api/books')
 const bucketlist = require('./routes/api/bucketlist')
-
-
 
 // sets up CORS for Cross-Origin-Resource-Sharing
 var corsOptions = {
@@ -98,3 +95,5 @@ function initial() {
       }
     });
   }
+
+initial();
