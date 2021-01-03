@@ -6,6 +6,11 @@ const bodyParser = require('body-parser')
 // initializes the express application
 const app = express()
 
+const path = __dirname + '/app/views/';
+
+app.use(express.static(path));
+
+
 // imports the API from the routes/api folder
 const books = require('./routes/api/books')
 const bucketlist = require('./routes/api/bucketlist')
@@ -40,8 +45,12 @@ dbAuth.mongoose
     .catch(err => console.log(err))
 
 // creates a route where we can interact with our API
-app.get("/", (req, res) => {
-    res.json({ message: "Running!" });
+// app.get("/", (req, res) => {
+//     res.json({ message: "Running!" });
+//   });
+
+  app.get('/', function (req, res) {
+    res.sendFile(path + "index.html");
   });
 app.use('/api/books', books)
 app.use('/api/bucketlist', bucketlist)
