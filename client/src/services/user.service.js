@@ -1,9 +1,9 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const port = process.env.PORT || 5000
+// const port = process.env.PORT || 5000
 
-const API_URL = `http://localhost:${port}/api/auth/`;
+const API_URL = `/api/auth/`;
 
 class UserService {
   getPublicContent() {
