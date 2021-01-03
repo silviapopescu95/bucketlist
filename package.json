@@ -1,0 +1,14 @@
+{
+  "name": "bucketlist",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  },
+  "proxy": "http://localhost:5000",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "cd api && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  }
+}
