@@ -8,6 +8,7 @@ const app = express()
 
 // imports the API from the routes/api folder
 const books = require('./routes/api/books')
+const bucketlist = require('./routes/api/bucketlist')
 
 
 
@@ -43,6 +44,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Running!" });
   });
 app.use('/api/books', books)
+app.use('/api/bucketlist', bucketlist)
 
 require('./routes/api/auth.js')(app);
 require('./routes/api/user.js')(app);
