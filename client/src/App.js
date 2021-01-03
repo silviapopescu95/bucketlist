@@ -10,6 +10,7 @@ import Home from "./components/home.component";
 import Register from "./components/register.component";
 import BookList from "./components/book.component";
 import Profile from "./components/profile.component";
+import BoardUser from "./components/board-user.component";
 
 
 class App extends Component {
@@ -47,7 +48,7 @@ class App extends Component {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/"} className="navbar-brand">
-           Project 3
+           2021 Bucket List App
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
@@ -55,11 +56,11 @@ class App extends Component {
                 Home
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to={"/book"} className="nav-link">
                 Book
               </Link>
-            </li>
+            </li> */}
 
             {showModeratorBoard && (
               <li className="nav-item">
@@ -123,6 +124,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
+            <Route path="/user" component={BoardUser} />
           </Switch>
         </div>
       </div>
