@@ -5,7 +5,6 @@
   "dependencies": {
     "concurrently": "^5.3.0"
   },
-  "proxy": "http://localhost:5000",
   "scripts": {
     "client": "cd client && npm install && npm start",
     "server": "cd api && npm install && npm start",
